@@ -3,6 +3,7 @@ package gelf
 import (
         "encoding/json"
         "errors"
+        "io/ioutil"
         "log"
         "os"
         "strings"
@@ -23,6 +24,14 @@ func init() {
 type GelfAdapter struct {
         writer *gelf.Writer
         route  *router.Route
+}
+
+func getopt(name, dfault string) string {
+	value := os.Getenv(name)
+	if value == "" {
+		value = dfault
+	}
+	return value
 }
 
 func getHostname() string {
@@ -122,6 +131,6 @@ func (m GelfMessage) getExtraFields() (json.RawMessage, error) {
 }
 
 // Hostname returns the os hostname
-func (m *Message) Hostname() string {
+func (m *GelfMessage) Hostname() string {
         return hostname
 }
